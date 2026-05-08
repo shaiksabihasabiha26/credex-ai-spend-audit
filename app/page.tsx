@@ -7,7 +7,7 @@ export default function Home() {
         </h1>
 
         <p className="text-slate-400 text-lg">
-          Optimize your AI tool spending intelligently.
+          Optimize your AI spending intelligently.
         </p>
 
         <button className="mt-6 px-6 py-3 bg-cyan-500 rounded-xl hover:bg-cyan-400 transition">
