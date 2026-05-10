@@ -73,12 +73,12 @@ export default function AuditForm({
           required
         />
 
-        <button
-          type="submit"
-className="bg-black text-white px-5 py-3 rounded-lg hover:bg-blue-600 hover:scale-105 transition duration-300"
-        >
-          Submit Audit
-        </button>
+       <button
+  type="submit"
+  className="bg-black text-white px-5 py-3 rounded-lg hover:bg-blue-600 hover:scale-105 transition duration-300"
+>
+  Submit Audit
+</button>
       </form>
     </div>
   );
