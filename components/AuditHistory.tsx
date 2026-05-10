@@ -29,7 +29,9 @@ export default function AuditHistory({
               </p>
 
               <p>
-                <strong>Tool:</strong> {item.tool}
+                <span className="bg-black text-white px-3 py-1 rounded-full text-sm">
+  {item.tool}
+</span>
               </p>
 
               <p>
