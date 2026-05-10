@@ -8,23 +8,32 @@ import Footer from "@/components/Footer";
 
 import AuditForm from "@/components/AuditForm";
 import SummaryCards from "@/components/SummaryCards";
-
 import SpendChart from "@/components/SpendChart";
 import Recommendations from "@/components/Recommendations";
 import AuditHistory from "@/components/AuditHistory";
 
+type AuditItem = {
+  company: string;
+  tool: string;
+  monthlySpend: string;
+};
+
 export default function Home() {
-  const [auditData, setAuditData] = useState([]);
+  const [auditData, setAuditData] = useState<
+    AuditItem[]
+  >([]);
 
   useEffect(() => {
-    const savedData = localStorage.getItem("credex-audits");
+    const savedData = localStorage.getItem(
+      "credex-audits"
+    );
 
     if (savedData) {
       setAuditData(JSON.parse(savedData));
     }
   }, []);
 
-  const addAudit = (newAudit) => {
+  const addAudit = (newAudit: AuditItem) => {
     const updatedData = [...auditData, newAudit];
 
     setAuditData(updatedData);
