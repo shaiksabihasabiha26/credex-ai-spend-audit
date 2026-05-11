@@ -44,25 +44,39 @@ export default function Home() {
     );
   };
 
+  const totalSpend = auditData.reduce(
+    (acc, item) =>
+      acc + Number(item.monthlySpend),
+    0
+  );
+
+  const totalTools = auditData.length;
+
+  const uniqueCompanies = new Set(
+    auditData.map((item) => item.company)
+  ).size;
+
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
       <Navbar />
 
       <Hero />
 
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         <SummaryCards auditData={auditData} />
 
         <div className="mt-8">
           <AuditForm addAudit={addAudit} />
         </div>
 
-        <div className="mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
           <SpendChart auditData={auditData} />
-        </div>
 
-        <div className="mt-8">
-          <Recommendations auditData={auditData} />
+          <Recommendations
+            spend={totalSpend}
+            employees={uniqueCompanies}
+            tools={totalTools}
+          />
         </div>
 
         <div className="mt-8">
