@@ -1,6 +1,6 @@
 "use client";
 
-import {useState } from "react";
+import { useState } from "react";
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -19,21 +19,15 @@ type AuditItem = {
 };
 
 export default function Home() {
-  const [auditData, setAuditData] = useState<
-    AuditItem[]
-  >([]);
+  const [auditData, setAuditData] = useState<AuditItem[]>(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem("credex-audits");
 
-  const [auditData, setAuditData] = useState(() => {
-  if (typeof window !== "undefined") {
-    const savedData = localStorage.getItem("auditData");
+      return savedData ? JSON.parse(savedData) : [];
+    }
 
-    return savedData
-      ? JSON.parse(savedData)
-      : [];
-  }
-
-  return [];
-});
+    return [];
+  });
 
   const addAudit = (newAudit: AuditItem) => {
     const updatedData = [...auditData, newAudit];
@@ -47,8 +41,7 @@ export default function Home() {
   };
 
   const totalSpend = auditData.reduce(
-    (acc, item) =>
-      acc + Number(item.monthlySpend),
+    (acc, item) => acc + Number(item.monthlySpend),
     0
   );
 
