@@ -1,51 +1,12 @@
 # Credex AI Spend Audit
 
-AI-powered SaaS spend analytics dashboard built using Next.js, TypeScript, Tailwind CSS, and Recharts.
+AI-powered SaaS spend optimization platform built with Next.js, TypeScript, Tailwind CSS, Recharts, Vitest, and GitHub Actions.
 
-## Overview
-
-Credex AI Spend Audit helps companies analyze operational SaaS spending, identify optimization opportunities, and visualize tool expenses through an interactive analytics dashboard.
-
-The platform allows teams to:
-- Track SaaS tool spending
-- Monitor operational costs
-- Generate AI-based recommendations
-- Visualize spending insights
-- Store audit history locally
+The platform helps startups analyze AI tooling expenses, identify overspending, and discover optimization opportunities across products like ChatGPT, Claude, Cursor, GitHub Copilot, Gemini, and Windsurf.
 
 ---
 
-## Features
-
-- Interactive analytics dashboard
-- Dynamic AI spend recommendations
-- SaaS spend visualization charts
-- Local storage persistence
-- Responsive modern UI
-- Audit history tracking
-- Real-time dashboard updates
-
----
-
-## Tech Stack
-
-- Next.js
-- TypeScript
-- Tailwind CSS
-- Recharts
-- Vercel
-
----
-
-## Screenshots
-
-### Dashboard Preview
-
-(Add screenshots here later)
-
----
-
-## Live Demo
+# Live Demo
 
 Deployment:
 https://credex-ai-spend-audit-eosin.vercel.app/
@@ -55,39 +16,108 @@ https://github.com/shaiksabihasabiha26/credex-ai-spend-audit
 
 ---
 
-## Installation
+# Features
 
-Clone the repository:
+- AI spend audit dashboard
+- SaaS pricing optimization engine
+- Savings calculations
+- Personalized AI summaries
+- Persistent audit storage
+- Interactive charts and analytics
+- GitHub Actions CI
+- Automated testing with Vitest
+- Responsive modern UI
+
+---
+
+# Tech Stack
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Recharts
+- Vitest
+- GitHub Actions
+- Vercel
+
+---
+
+# Screenshots
+
+(Add screenshots here)
+
+---
+
+# Quick Start
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/shaiksabihasabiha26/credex-ai-spend-audit.git
 ```
 
-Install dependencies:
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-Run development server:
+## Run Development Server
 
 ```bash
 npm run dev
 ```
 
+## Run Tests
+
+```bash
+npm run test
+```
+
 ---
 
-## Future Improvements
+# Decisions & Tradeoffs
 
-- PDF export reports
-- Advanced analytics
+## 1. Deterministic Audit Logic
+I intentionally used hardcoded business rules instead of AI-generated financial reasoning for reliability and explainability.
+
+## 2. localStorage Persistence
+localStorage was chosen initially to reduce backend complexity while building the MVP quickly.
+
+## 3. Next.js Selection
+Next.js provided fast deployment, routing, and strong developer experience for shipping rapidly.
+
+## 4. Lightweight Analytics
+Recharts was selected to keep dashboard performance lightweight while still providing useful visualizations.
+
+## 5. AI Limited To Summaries
+AI is used only for personalized summaries, not core pricing calculations, to improve trust and consistency.
+
+---
+
+# Future Improvements
+
+- Database persistence
 - Authentication
-- Database integration
-- AI forecasting insights
-- Dark mode support
+- Benchmark analytics
+- PDF export
+- Open Graph previews
+- Shareable public audit pages
+- Email delivery
+- Team dashboards
 
 ---
 
-## Author
+# CI & Testing
+
+GitHub Actions automatically runs:
+- linting
+- Vitest unit tests
+
+on every push to main.
+
+---
+
+# Author
 
 Shaik Sabiha
