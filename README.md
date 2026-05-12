@@ -45,17 +45,13 @@ https://github.com/shaiksabihasabiha26/credex-ai-spend-audit
 ## Screenshots
 
 ### Dashboard
-
-![Dashboard](./public/dashboard.png)
+![Dashboard](/dashboard.png)
 
 ### Analytics
-
-![Analytics](./public/analytics.png)
+![Analytics](/analytics.png)
 
 ### Audit History
-
-![History](./public/history.png)
-
+![History](/history.png)
 # Quick Start
 
 ## Clone Repository
