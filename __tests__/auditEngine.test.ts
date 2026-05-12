@@ -1,62 +1,71 @@
-type AuditInput = {
-  tool: string;
-  plan: string;
-  seats: number;
-  monthlySpend: number;
-};
+import { describe, it, expect } from "vitest";
+import { runAudit } from "../lib/auditEngine";
 
-export type AuditResult = {
-  tool: string;
-  currentSpend: number;
-  recommendedPlan: string;
-  optimizedSpend: number;
-  monthlySavings: number;
-  annualSavings: number;
-  reason: string;
-};
+describe("Audit Engine", () => {
+  it("detects overspending for small teams", () => {
+    const result = runAudit([
+      {
+        tool: "Cursor",
+        plan: "Business",
+        seats: 2,
+        monthlySpend: 100,
+      },
+    ]);
 
-export function runAudit(audits: AuditInput[]): AuditResult[] {
-  return audits.map((audit) => {
-    let optimizedSpend = audit.monthlySpend;
-    let recommendedPlan = audit.plan;
-    let reason = "Current plan is appropriate.";
-
-    if (audit.seats <= 2 && audit.monthlySpend > 50) {
-      optimizedSpend = audit.monthlySpend * 0.6;
-      recommendedPlan = "Lower Tier Plan";
-
-      reason =
-        "Small teams are often overspending on enterprise-grade AI subscriptions.";
-    }
-
-    if (audit.tool === "ChatGPT" && audit.seats === 1) {
-      optimizedSpend = 20;
-
-      recommendedPlan = "ChatGPT Plus";
-
-      reason =
-        "Single-user teams usually benefit more from ChatGPT Plus instead of Team plans.";
-    }
-
-    if (audit.tool === "Claude" && audit.monthlySpend > 100) {
-      optimizedSpend = audit.monthlySpend * 0.7;
-
-      recommendedPlan = "Claude Team";
-
-      reason =
-        "Claude Team plans typically provide better cost efficiency for medium usage.";
-    }
-
-    const monthlySavings = audit.monthlySpend - optimizedSpend;
-
-    return {
-      tool: audit.tool,
-      currentSpend: audit.monthlySpend,
-      recommendedPlan,
-      optimizedSpend,
-      monthlySavings,
-      annualSavings: monthlySavings * 12,
-      reason,
-    };
+    expect(result[0].monthlySavings).toBeGreaterThan(0);
   });
-}
+
+  it("optimizes ChatGPT plan", () => {
+    const result = runAudit([
+      {
+        tool: "ChatGPT",
+        plan: "Team",
+        seats: 1,
+        monthlySpend: 60,
+      },
+    ]);
+
+    expect(result[0].recommendedPlan).toBe("ChatGPT Plus");
+  });
+
+  it("calculates annual savings", () => {
+    const result = runAudit([
+      {
+        tool: "Claude",
+        plan: "Enterprise",
+        seats: 3,
+        monthlySpend: 200,
+      },
+    ]);
+
+    expect(result[0].annualSavings).toBeGreaterThan(0);
+  });
+
+  it("returns proper tool name", () => {
+    const result = runAudit([
+      {
+        tool: "Gemini",
+        plan: "Ultra",
+        seats: 2,
+        monthlySpend: 80,
+      },
+    ]);
+
+    expect(result[0].tool).toBe("Gemini");
+  });
+
+  it("keeps optimized spend lower", () => {
+    const result = runAudit([
+      {
+        tool: "Claude",
+        plan: "Max",
+        seats: 1,
+        monthlySpend: 120,
+      },
+    ]);
+
+    expect(result[0].optimizedSpend).toBeLessThan(
+      result[0].currentSpend
+    );
+  });
+});
