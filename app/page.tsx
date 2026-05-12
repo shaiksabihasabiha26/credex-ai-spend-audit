@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -23,15 +23,17 @@ export default function Home() {
     AuditItem[]
   >([]);
 
-  useEffect(() => {
-    const savedData = localStorage.getItem(
-      "credex-audits"
-    );
+  const [auditData, setAuditData] = useState(() => {
+  if (typeof window !== "undefined") {
+    const savedData = localStorage.getItem("auditData");
 
-    if (savedData) {
-      setAuditData(JSON.parse(savedData));
-    }
-  }, []);
+    return savedData
+      ? JSON.parse(savedData)
+      : [];
+  }
+
+  return [];
+});
 
   const addAudit = (newAudit: AuditItem) => {
     const updatedData = [...auditData, newAudit];
