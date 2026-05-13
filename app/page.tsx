@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { exportAuditToPDF } from "@/lib/pdfExport";
 
 import Navbar from "@/components/Navbar";
@@ -20,23 +20,18 @@ type AuditItem = {
 };
 
 export default function Home() {
-  const [auditData, setAuditData] = useState<AuditItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // ✅ CI-safe: no useEffect, no setState inside effect
+  const [auditData, setAuditData] = useState<AuditItem[]>(() => {
+    if (typeof window === "undefined") return [];
 
-  // Load from localStorage safely (client-only)
-  useEffect(() => {
     try {
       const savedData = localStorage.getItem("credex-audits");
-
-      if (savedData) {
-        setAuditData(JSON.parse(savedData));
-      }
+      return savedData ? JSON.parse(savedData) : [];
     } catch (err) {
-      console.error("Failed to load audit data:", err);
-    } finally {
-      setIsLoaded(true);
+      console.error("Failed to parse localStorage data:", err);
+      return [];
     }
-  }, []);
+  });
 
   const addAudit = (newAudit: AuditItem) => {
     const updatedData = [...auditData, newAudit];
@@ -44,10 +39,7 @@ export default function Home() {
     setAuditData(updatedData);
 
     try {
-      localStorage.setItem(
-        "credex-audits",
-        JSON.stringify(updatedData)
-      );
+      localStorage.setItem("credex-audits", JSON.stringify(updatedData));
     } catch (err) {
       console.error("Failed to save audit data:", err);
     }
@@ -63,14 +55,6 @@ export default function Home() {
   const uniqueCompanies = new Set(
     auditData.map((item) => item.company)
   ).size;
-
-  if (!isLoaded) {
-    return (
-      <div className="p-10 text-center text-gray-500">
-        Loading dashboard...
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
