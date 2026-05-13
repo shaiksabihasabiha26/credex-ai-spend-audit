@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { exportAuditToPDF } from "@/lib/pdfExport";
 
 import Navbar from "@/components/Navbar";
@@ -20,13 +20,17 @@ type AuditItem = {
 };
 
 export default function Home() {
-  const [auditData, setAuditData] = useState<AuditItem[]>(() => {
-    if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem("credex-audits");
-      return savedData ? JSON.parse(savedData) : [];
+  const [auditData, setAuditData] = useState<AuditItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // FIX: load localStorage AFTER mount
+  useEffect(() => {
+    const savedData = localStorage.getItem("credex-audits");
+    if (savedData) {
+      setAuditData(JSON.parse(savedData));
     }
-    return [];
-  });
+    setIsLoaded(true);
+  }, []);
 
   const addAudit = (newAudit: AuditItem) => {
     const updatedData = [...auditData, newAudit];
@@ -47,6 +51,14 @@ export default function Home() {
     auditData.map((item) => item.company)
   ).size;
 
+  if (!isLoaded) {
+    return (
+      <div className="p-10 text-center text-gray-500">
+        Loading dashboard...
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
       <Navbar />
@@ -61,7 +73,7 @@ export default function Home() {
           <AuditForm addAudit={addAudit} />
         </div>
 
-        {/* PDF EXPORT BUTTON */}
+        {/* PDF BUTTON */}
         <div className="flex justify-end mt-6">
           <button
             onClick={() => exportAuditToPDF("audit-report")}

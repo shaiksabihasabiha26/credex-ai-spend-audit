@@ -1,43 +1,37 @@
+"use client";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
-export const exportAuditToPDF = async (elementId: string) => {
-  const input = document.getElementById(elementId);
+export const exportAuditToPDF = (elementId: string) => {
+  try {
+    const element = document.getElementById(elementId);
 
-  if (!input) {
-    console.error("PDF export failed: element not found");
-    return;
-  }
-
-  const canvas = await html2canvas(input, {
-    scale: 2,
-    useCORS: true,
-  });
-
-  const imgData = canvas.toDataURL("image/png");
-
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
-
-  const imgWidth = pdfWidth;
-  const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  let position = 0;
-
-  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-
-  if (imgHeight > pdfHeight) {
-    let heightLeft = imgHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
+    if (!element) {
+      console.error("PDF ERROR: element not found");
+      return;
     }
-  }
 
-  pdf.save("credex-audit-report.pdf");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    pdf.setFont("helvetica");
+    pdf.setFontSize(12);
+
+    let y = 10;
+
+    const text = element.innerText;
+
+    const lines = pdf.splitTextToSize(text, 180);
+
+    lines.forEach((line: string) => {
+      if (y > 280) {
+        pdf.addPage();
+        y = 10;
+      }
+      pdf.text(line, 10, y);
+      y += 7;
+    });
+
+    pdf.save("credex-audit-report.pdf");
+  } catch (err) {
+    console.error("PDF FAILED:", err);
+  }
 };

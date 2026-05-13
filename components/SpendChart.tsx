@@ -20,16 +20,17 @@ type Props = {
   auditData: AuditItem[];
 };
 
-export default function SpendChart({
-  auditData,
-}: Props) {
+export default function SpendChart({ auditData }: Props) {
   const chartData = auditData.map((item) => ({
     name: item.tool,
-    spend: Number(item.monthlySpend),
+    spend: Number(item.monthlySpend) || 0,
   }));
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 h-[420px]">
+    <div
+      className="bg-white rounded-2xl shadow-md p-6 h-[420px]"
+      style={{ backgroundColor: "#ffffff" }} // IMPORTANT for PDF stability
+    >
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
           SaaS Spend Analytics
@@ -45,22 +46,28 @@ export default function SpendChart({
           No analytics data available yet.
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height="80%">
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
+        <div style={{ width: "100%", height: "300px" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis dataKey="name" />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 12 }}
+              />
 
-            <YAxis />
+              <YAxis />
 
-            <Tooltip />
+              <Tooltip />
 
-            <Bar
-              dataKey="spend"
-              radius={[10, 10, 0, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+              <Bar
+                dataKey="spend"
+                fill="#000000"
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   );
