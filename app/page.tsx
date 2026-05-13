@@ -23,13 +23,19 @@ export default function Home() {
   const [auditData, setAuditData] = useState<AuditItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // FIX: load localStorage AFTER mount
+  // Load from localStorage safely (client-only)
   useEffect(() => {
-    const savedData = localStorage.getItem("credex-audits");
-    if (savedData) {
-      setAuditData(JSON.parse(savedData));
+    try {
+      const savedData = localStorage.getItem("credex-audits");
+
+      if (savedData) {
+        setAuditData(JSON.parse(savedData));
+      }
+    } catch (err) {
+      console.error("Failed to load audit data:", err);
+    } finally {
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
   }, []);
 
   const addAudit = (newAudit: AuditItem) => {
@@ -37,7 +43,14 @@ export default function Home() {
 
     setAuditData(updatedData);
 
-    localStorage.setItem("credex-audits", JSON.stringify(updatedData));
+    try {
+      localStorage.setItem(
+        "credex-audits",
+        JSON.stringify(updatedData)
+      );
+    } catch (err) {
+      console.error("Failed to save audit data:", err);
+    }
   };
 
   const totalSpend = auditData.reduce(
