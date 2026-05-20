@@ -1,42 +1,58 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 type AuditItem = {
   company: string;
   tool: string;
   monthlySpend: string;
 };
 
+type Props = {
+  auditData: AuditItem[];
+};
+
 export default function AuditHistory({
   auditData,
-}: {
-  auditData: AuditItem[];
-}) {
+}: Props) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="bg-white p-6 rounded-xl shadow">
-      <h2 className="text-2xl font-semibold mb-4">
-        Previous Audits
+    <div className="bg-white p-6 rounded-2xl shadow-md">
+      <h2 className="text-2xl font-bold mb-6">
+        Audit History
       </h2>
 
       {auditData.length === 0 ? (
-        <p>No audits submitted yet.</p>
+        <p className="text-gray-500">
+          No audits submitted yet.
+        </p>
       ) : (
         <div className="space-y-4">
           {auditData.map((item, index) => (
             <div
               key={index}
-              className="border p-4 rounded-lg"
+              className="border rounded-xl p-4"
             >
-              <p>
-                <strong>Company:</strong> {item.company}
+              <h3 className="font-semibold text-lg">
+                {item.company}
+              </h3>
+
+              <p className="text-gray-600">
+                Tool: {item.tool}
               </p>
 
-              <p>
-                <span className="bg-black text-white px-3 py-1 rounded-full text-sm">
-  {item.tool}
-</span>
-              </p>
-
-              <p>
-                <strong>Monthly Spend:</strong> ₹
-                {item.monthlySpend}
+              <p className="text-gray-600">
+                Monthly Spend: ₹{item.monthlySpend}
               </p>
             </div>
           ))}
