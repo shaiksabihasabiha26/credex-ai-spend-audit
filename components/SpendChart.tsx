@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import {
   BarChart,
   Bar,
@@ -21,6 +23,17 @@ type Props = {
 };
 
 export default function SpendChart({ auditData }: Props) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null;
+  }
+
   const chartData = auditData.map((item) => ({
     name: item.tool,
     spend: Number(item.monthlySpend) || 0,
@@ -29,7 +42,7 @@ export default function SpendChart({ auditData }: Props) {
   return (
     <div
       className="bg-white rounded-2xl shadow-md p-6 h-[420px]"
-      style={{ backgroundColor: "#ffffff" }} // IMPORTANT for PDF stability
+      style={{ backgroundColor: "#ffffff" }}
     >
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
